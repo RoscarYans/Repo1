@@ -1,0 +1,15 @@
+from thredds_crawler.crawl import Crawl
+
+
+if __name__ == "__main__":
+    catalog = 'https://ds.nccs.nasa.gov/thredds/catalog/AMES/NEX/GDDP-CMIP6/catalog.html'
+
+    # Add variable names or scenario info here to skip based on filename
+    skips = Crawl.SKIPS + ['tas_', 'tasmin_', 'tasmax_', 'sfcWind_', 'rsds_', 'rlds_', 'huss_', 'huss_', 'hurs_'] + ['_ssp370_', '_ssp126_']
+
+    c = Crawl(catalog, debug=True, workers=16, skip=skips)
+
+    links = [d.services[0]['url'] for d in c.datasets]
+
+    with open('nex-gddp_cmip6_links.txt', 'w') as f:
+        f.write('\n'.join(links))
